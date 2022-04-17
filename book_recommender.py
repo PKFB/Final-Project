@@ -9,6 +9,7 @@ Challenges Encountered: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import sys
 import argparse
+import pandas as pd
 
 class Book:
     """A class to represent a Book object.
@@ -74,6 +75,11 @@ def parse_args(args_list):
     args = parser.parse_args(args_list) #We need to parse the list of command line arguments using this object.
 
     return args
+
+data = pd.read_csv(r"C:books.csv")
+
+descriptions = data['title'] +' '+ data['author'] + ' ' + data['genre'] +' '+ data['ratings'] +' '+ data['pages']
+
 
 if __name__ == "__main__":
     #If name == main statements are statements that basically ask:
