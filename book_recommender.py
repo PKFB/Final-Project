@@ -49,6 +49,14 @@ class Book:
         
 class Recommender:
     
+    def recommend(books):
+        #movie_index 
+        movie_list = df[df['title'].strcontains(book)]
+        if len(book_list):
+            book_idx = book_list.index[0]
+            book_list = sorted(list(),reverse=True, key = ()x:x[1]) [1:6]
+    
+    
     def __init__(self,book, user_author, user_genre,user_rating,user_length):
         #this is supposed to pass in the attribute from the book class to the recommendation class
         rating_scale = 
