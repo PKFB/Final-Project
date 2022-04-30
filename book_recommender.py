@@ -41,6 +41,12 @@ class Book:
 
         f.close()
         
+    preferences = ["author","genre", "length", "rating"]
+   def combine_prefrences(row):
+    return row['author']+ " " +row ['genre']+" "+row['length']+ " "row['rating']
+    df["combined_features"] = df.apply(combined_features, axis =1)
+    print df["combined_features"].head()
+        
 class Recommender:
     
     def __init__(self,book, user_author, user_genre,user_rating,user_length):
