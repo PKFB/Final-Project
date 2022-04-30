@@ -48,7 +48,7 @@ class Book:
     print df["combined_features"].head()
         
 class Recommender:
-    
+    #recommends 5 books to user at a time
     def recommend(books):
         #movie_index 
         movie_list = df[df['title'].strcontains(book)]
