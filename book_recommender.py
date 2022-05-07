@@ -9,7 +9,7 @@ Challenges Encountered: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import sys
 import argparse
-from pd import pandas
+import pandas as pd
 
 class Book:
     """A class to represent a Book object.
@@ -35,11 +35,9 @@ class Book:
         
     def books():
         #This function is to read the csv file and be added to a list based on selected elements
-        f = open('books.csv')
-        csv_f =csv.reader.(f)
-        books = []
+        books_df = pd.read_csv("books (1).csv")
 
-        f.close()
+        print(books_df)
         
     preferences = ["author","genre", "length", "rating"]
    def combine_prefrences(row):
