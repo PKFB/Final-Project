@@ -9,8 +9,39 @@ Challenges Encountered: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 import sys
 import argparse
-from pd import pandas
+import csv
 
+from numpy import size
+
+""" A class for holding responses from the user about their book preferences.
+        Attributes:
+            preferred_author (String): User response to preferred author question
+            preferred_genre (String): User response from terminal about their favorite genres
+            preferred_rating (float): User response from terminal about their preferred rating (1 - 5)
+            preferred_length (String): User response from terminal about preferred length of a book (short or long) 
+"""
+class Recommender:
+    def __init__(self):
+        self.books = list()
+        with open('books.csv', 'r') as csv_file:
+            spreadsheet = csv.reader(csv_file)
+
+            next(spreadsheet)
+            
+            for row in spreadsheet:
+                self.books.append(Book(row[1],row[2],row[3],row[7]))
+    
+    def recommend(self, author, avg_rating, length):
+        top_books = list()
+        index = 0
+        while size(top_books) < 5:
+            book = self.books[index]
+            if book.author == author and book.avg_rating >= avg_rating and book.length >= length:
+                top_books.append(book)
+            index += 1
+            
+        return top_books
+                
 class Book:
     """A class to represent a Book object.
     
@@ -21,64 +52,23 @@ class Book:
         avg_rating (float): The avg_rating for a book based on goodreads reviews.
         length (string): The length of a book either being 'short' or 'long' based on page count.
     """
-    def __init__(self, title, author, genre, avg_rating, length):
-        pass
-        """Initializes a Book object.
-        
-        Args:
-            title (string): See class documentation.
-            author (string): See class documentation.
-            genre (tuple of strings): See class documentation.
-            avg_rating (float): See class documentation.
-            length (string): See class documentation.
-        """
-        
-    def books():
-        #This function is to read the csv file and be added to a list based on selected elements
-        f = open('books.csv')
-        csv_f =csv.reader.(f)
-        books = []
-
-        f.close()
-        
-class Recommender:
-    
-    def __init__(self,book, user_author, user_genre,user_rating,user_length):
-        #this is supposed to pass in the attribute from the book class to the recommendation class
-        rating_scale = 
-        self.book = book
-        self.user_author = user_author
-        self.user_genre = ()
-        self.user_length = ()
-        self.user_rating =
-
-
-    def recommendation(self):
-        #This is supposed to append the list of books given to the users based on their preferences
-        for book in book_list:
-            if book.author == user_author:
-                recommendation.append(book)
-        for book in book_list:
-            if book.genre == user_genre:
-                recommendation.append(book)
-        for book in book_list:
-            if book.rating == user_rating:
-                recommendation.append(book)
-        for book in book_list:
-            if book.length == user_length:
-                recommendation.append(book)
-    """A class for holding responses from the user about their book preferences.
-    
-        Attributes:
-            preferred_author (String): User response to preferred author question
-            preferred_genre (String): User response from terminal about their favorite genres
-            preferred_rating (float): User response from terminal about their preferred rating (1 - 5)
-            preferred_length (String): User response from terminal about preferred length of a book (short or long)
-    """
-
+    def __init__(self, title, author, avg_rating, length):
+        #See class documentation
+        self.title = title
+        self.author = author
+        #self.genre = genre
+        self.avg_rating = avg_rating
+        self.length = length
+            
 def main(parameter1, parameter2):
-    pass
-
+    preferred_author = input("Please enter if you have a preference for a certain author: ")
+    preferred_rating = input("Pleaes enter if you have a preference for a certain rating range (1-5): ")
+    preferred_length = input("Please enter if you have a preference for a certain length (short, medium, long): ")
+    new_Recommender = Recommender()
+    recommended_books = new_Recommender.recommend(preferred_author,preferred_rating,preferred_length)
+    for book in recommended_books:
+        print(book.title)
+    
 def parse_args(args_list):
     """Takes a list of strings from the command prompt and passes them through as arguments
     
@@ -90,22 +80,14 @@ def parse_args(args_list):
     
     parser = argparse.ArgumentParser()
     
-    parser.add_argument('required', type=float, help='This is an example of a required argument.')
+    parser.add_argument('--optional', type=float, help='This is an example of a required argument.')
     parser.add_argument('--optional', '-o', type=int, default=12, help='This is an example of an optional argument')  
     
     args = parser.parse_args(args_list)
 
     return args
 
-data = pd.read_csv(r"C:books.csv")
-
-descriptions = data['title'] +' '+ data['author'] + ' ' + data['genre'] +' '+ data['ratings'] +' '+ data['pages']
-""""""
-
 if __name__ == "__main__":
-    
-    arguments = parse_args(sys.argv[1:])
-    
-    main(arguments.required, arguments.optional)
+    main(None, None)
 
 
