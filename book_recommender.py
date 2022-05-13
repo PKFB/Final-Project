@@ -7,8 +7,6 @@ Date: 4_15_2022
 Challenges Encountered: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
-import sys
-import argparse
 import csv
 
 """ A class for holding responses from the user about their book preferences.
@@ -33,10 +31,10 @@ class Recommender:
     def recommend(self, author, avg_rating, length):
         top_books = list()
         index = 0
-        while len(top_books) < 5:
+        while len(top_books) != 5 or index < len(self.books):
             book = self.books[index]
-            print(self.books[5].length)
-            if book.author == author and book.avg_rating >= avg_rating and book.length == length:
+            print(index)
+            if book.author == author and book.avg_rating >= avg_rating and book.length >= length:
                 top_books.append(book)
             index += 1
             
@@ -58,13 +56,14 @@ class Book:
         self.avg_rating = avg_rating
         #The length is 'short' if the page count is <= 300, 'medium' if page count is > 300 and <= 600,
         #'long' if page count is larger.
-        self.length = int(length)
-        if self.length <= 300:
+        self.length = length
+        if self.length <= '300':
             self.length = 'short'
-        elif self.length > 300 and self.length <= 600:
+        elif self.length > '300' and self.length <= '600':
                 self.length = 'medium'
         else:
-            self.length = 'long'
+            self.length = 'long' 
+       
             
 if __name__ == "__main__":
     preferred_author = input("Please enter if you have a preference for a certain author: ")
