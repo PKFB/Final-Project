@@ -2,16 +2,15 @@ import book_recommender
 
 from book_recommender import *
 
-
-    def test_book_build(self):
-        Book()
+def test_book_build(self):
+    Book()
    ''books get put into a list'''
    #happy path
-       self.assertBook("Paul Auster",203, 'long') 
+    self.assertBook("Paul Auster",203, 'long') 
      
   #edge case
-        self.assertBook("Bill Bryson", 26 ,'short') # page count is 299
-        self.assertBook("", ,)
+     self.assertBook("Bill Bryson", 26 ,'short') # page count is 299
+     self.assertBook("", ,)
         
     def test_recommender_build(self):
     Recommender
