@@ -1,77 +1,89 @@
-"""A template for a python script deliverable for INST326.
-
+"""
 Authors: Trent Williams, Melissa Kavege, Kai Jung
 Assignment: Final Project
 Date: 4_15_2022
-
-Challenges Encountered: ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 """
 
-import sys
-import argparse
 import csv
-import pandas as pd
-""" A class for holding responses from the user about their book preferences.
+
+""" A class for reading book titles from a csv file into a list of Book objects.
+    Returns a list of recommended book titles based on user input.
         Attributes:
-            preferred_author (String): User response to preferred author question
-            preferred_genre (String): User response from terminal about their favorite genres
-            preferred_rating (float): User response from terminal about their preferred rating (1 - 5)
-            preferred_length (String): User response from terminal about preferred length of a book (short or long) 
+           books (list of Book objects): Initially empty when instantiated, a list of Book objects created using data from the csv file.
 """
-books_df = pd.read_csv("books.csv")
-
-print(books_df)
-
 class Recommender:
     def __init__(self):
-        self.book_list = {"Harry Potter and the Half-Blood Prince (Harry Potter  #6)": ["J.K. Rowling/Mary GrandPré", "4.57", "652", "Scholastic Inc."],
-                     "The Ultimate Hitchhiker's Guide: Five Complete Novels and One Story (Hitchhiker's Guide to the Galaxy  #1-5)": ["Douglas Adams", "4.38", "815", "Gramercy Books"],
-                     "A Short History of Nearly Everything": ["Bill Bryson", "4.21", "544", "Broadway Books"],
-                     "J.R.R. Tolkien 4-Book Boxed Set: The Hobbit and The Lord of the Rings": ["J.R.R. Tolkien", "4.59", "1728", "Ballantine Books"],
-                     "Hatchet (Brian's Saga  #1)": ["Gary Paulsen", "3.72", "208", "Atheneum Books for Young Readers: Richard Jackson Books"]}       
+        """Initializes the Recommender object"""
         self.books = list()
-        for book in self.book_list:
-            self.books.append(Book(book, self.book_list[book][0], self.book_list[book][1], self.book_list[book][2]))
+        with open('books.csv', 'r') as csv_file:
+            spreadsheet = csv.reader(csv_file)
+        
+            """Skips over the first row of the csv file to ignore the headers of each column."""
+            next(spreadsheet)
+            
+            for row in spreadsheet:
+                self.books.append(Book(row[1],row[2],row[3], row[7]))
     
+    def recommend(self, author_preference, avg_rating_preference, length_preference):
+        """Using the user's inputted preferences, the function iterates through the books list and checks 
+            for titles with attributes that match. Those titles are then added to a list of the top 5 books to recommend
+            to the user.
+        
+           Args:
+               author_preference (string): The user's preferred author.
+               avg_rating_preference (float): The user's preffered average rating.
+               length_preference (string): The user's preferred length.
+               
+           Returns:
+               list of the first 5 books that mee the user's criteria.             
+        """
+        top_books = list()
+        index = 0
+        while index < len(self.books) and len(top_books) != 5:
+            book = self.books[index]
+            if book.author == author_preference and book.avg_rating >= avg_rating_preference and book.length == length_preference:
+                top_books.append(book)
+            index += 1
+            
+        return top_books
+                
 class Book:
     """A class to represent a Book object.
     
     Attributes:
         title (string): The title of a book.
         author (string): The author of a book.
-        genre (tuple of strings): A tuple containing the different genres of a book.
         avg_rating (float): The avg_rating for a book based on goodreads reviews.
-        length (string): The length of a book either being 'short' or 'long' based on page count.
+        length (string): The length of a book either being 'short', 'medium', or 'long' based on page count.
     """
     def __init__(self, title, author, avg_rating, length):
-        #See class documentation
+        """Initializes a Book object.
+        
+           Args:
+               title (string): See class documentation.
+               author (string): See class documentation.
+               avg_rating (float): See class documentation.
+               length (string): See class documentation.
+        """
         self.title = title
         self.author = author
-        #self.genre = genre
         self.avg_rating = avg_rating
         self.length = length
+        
+        #The length is 'short' if the page count is <= 300, 'medium' if page count is > 300 and <= 600, 'long' if page count is larger.
+        if self.length <= '300':
+            self.length = 'short'
+        elif self.length > '300' and self.length <= '600':
+                self.length = 'medium'
+        else:
+            self.length = 'long' 
             
-def main(parameter1, parameter2):
-    new_Recommender = Recommender()
-    print(new_Recommender.books[0].length)
-    
-def parse_args(args_list):
-    """Takes a list of strings from the command prompt and passes them through as arguments
-    
-    Args:
-        args_list (list) : the list of strings from the command prompt
-    Returns:
-        args (ArgumentParser)
-    """
-    
-    parser = argparse.ArgumentParser()
-    
-    parser.add_argument('--optional', type=float, help='This is an example of a required argument.')
-    parser.add_argument('--optional', '-o', type=int, default=12, help='This is an example of an optional argument')  
-    
-    args = parser.parse_args(args_list)
-
-    return args
-
+ 
 if __name__ == "__main__":
-    main(None, None)
+    inputted_author = input("Please enter if you have a preference for a certain author: ").title()
+    inputted_rating = input("Please enter if you have a preference for a certain rating range (1-5): ")
+    inputted_length = input("Please enter if you have a preference for a certain length (short, medium, long): ")
+    new_Recommender = Recommender()
+    recommended_books = new_Recommender.recommend(inputted_author,inputted_rating,inputted_length)
+    for book in recommended_books:
+        print(book.title)
