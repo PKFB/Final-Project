@@ -18,7 +18,7 @@ from book_recommender import *
     '''What will be tested author, rating, length
     top books, starting index, length for short medium and long'''
    #happy path
-        self.assertRecommender
+        self.assertRecommender()
      
   #edge case
         
