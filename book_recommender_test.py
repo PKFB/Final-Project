@@ -1,17 +1,18 @@
 import book_recommender
 
-from book_recommender import book
-from book_recommender import Recommender
+from book_recommender import *
 
 
     def test_book_build(self):
-        book()
+        Book()
    ''books get put into a list'''
    #happy path
-       self
+       self.assertBook("Paul Auster",203, 'long') 
      
   #edge case
-
+        self.assertBook("Bill Bryson", 26 ,'short') # page count is 299
+        self.assertBook("", ,)
+        
     def test_recommender_build(self):
     Recommender
     '''What will be tested author, rating, length
