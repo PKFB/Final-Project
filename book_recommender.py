@@ -24,7 +24,7 @@ class Recommender:
             for row in spreadsheet:
                 self.books.append(Book(row[1],row[2],row[3], row[7]))
     
-    def recommend(self, author_preference, avg_rating_preference, length_peference):
+    def recommend(self, author_preference, avg_rating_preference, length_preference):
         """Using the user's inputted preferences, the function iterates through the books list and checks 
             for titles with attributes that match. Those titles are then added to a list of the top 5 books to recommend
             to the user.
@@ -37,15 +37,35 @@ class Recommender:
            Returns:
                list of the first 5 books that mee the user's criteria.             
         """
-        top_books = list()
+        criteria = 3 #represents number of available filter criteria
+        rankings = []
+        for i in range(criteria + 1):
+            rankings.append([])
+        for book in self.books:
+            score = book.compare(author_preference, avg_rating_preference, length_preference)
+            if (score > 0): #No need to store
+                rankings[score].append(book)
+        j = criteria
+        recommended_books = []
+        while (j > 0):
+            if (rankings[j]):
+                for k in rankings[j]:
+                    if (len(recommended_books) == 5):
+                        return recommended_books
+                    else:
+                        recommended_books.append(k)
+            j -= 1
+        return recommended_books
+        
+        """ top_books = list()
         index = 0
         while index < len(self.books) and len(top_books) != 5:
             book = self.books[index]
-            if book.author == author_preference and book.avg_rating >= avg_rating_preference and book.length >= length_peference:
+            if book.author == author_preference and book.avg_rating >= avg_rating_preference and book.length >= length_preference:
                 top_books.append(book)
             index += 1
             
-        return top_books
+        return top_books """
                 
 class Book:
     """A class to represent a Book object.
@@ -77,10 +97,21 @@ class Book:
                 self.length = 'medium'
         else:
             self.length = 'long' 
+            
+    def compare(self, author, avg_rating, length):
+    #Returns a score (integer) of the match of a book to user's preferences
+        score = 0
+        if (author == self.author):
+            score+=1
+        if (self.avg_rating >= avg_rating):
+            score+=1
+        if (self.length == length):
+            score+=1
+        return score
        
             
 if __name__ == "__main__":
-    inputted_author = input("Please enter if you have a preference for a certain author: ")
+    inputted_author = input("Please enter if you have a preference for a certain author: ").title()
     inputted_rating = input("Please enter if you have a preference for a certain rating range (1-5): ")
     inputted_length = input("Please enter if you have a preference for a certain length: ")
     new_Recommender = Recommender()
